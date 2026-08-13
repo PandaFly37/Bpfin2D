@@ -1,8 +1,8 @@
-unsigned int (32-bit)
-start: (1, 1)
-(1, 1) must in <>^v
-out the text will end
+起始点：左上角
+左上角必须是 <>^v 之一
+当运行至文本外时，程序结束
 
+操作：
 <>^v[]
 -| +
 /\
