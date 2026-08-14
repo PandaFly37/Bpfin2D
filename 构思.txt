@@ -1,0 +1,97 @@
+Bpfin2D
+提示: 使用字符等宽的软件阅读更方便
+
+列表:
+code[][]: 代码
+data[]: 运行时的存储("纸带")(初始均为0,理论上无限长)
+
+变量:
+IP(x,y): 当前程序运行位置(正整数,开始时0,0)
+FX: 下一步的IP移动方向(U,D,L,R)
+M0,M1,M2: 存储指针(下标)(非负整数,开始时均为0)
+MC: 当前控制的存储指针(0/1/2,对应上一行三个指针,开始时为0)
+
+如何运行:
+IP <- (0,0);
+M0,M1,M2 <- (0,0,0);
+MC <- 0;
+data <- []
+loop {
+    check();
+    op <- code[IPx][IPy];
+    do(op);
+    move();
+}
+end.
+
+do(op):
+op 操作
+<  FX <- L
+>  FX <- R
+^  FX <- U
+v  FX <- D
+[  if FX == U do FX <- L
+   if FX == D do FX <- R
+   if FX == L do FX <- D
+   if FX == R do FX <- U
+]  if FX == U do FX <- R
+   if FX == D do FX <- L
+   if FX == L do FX <- U
+   if FX == R do FX <- D
+-  if FX == L or FX == R
+     do continue
+   if FX == U do FX <- D
+   if FX == D do FX <- U
+|  if FX == U or FX == D
+     do continue
+   if FX == L do FX <- R
+   if FX == R do FX <- L
++  continue
+/  if data[M1] == data[M2]
+     do if FX == U do FX <- R
+        if FX == D do FX <- L
+        if FX == L do FX <- U
+        if FX == R do FX <- D
+   else do continue
+\  if data[M1] == data[M2]
+     do if FX == U do FX <- L
+        if FX == D do FX <- R
+        if FX == L do FX <- D
+        if FX == R do FX <- U
+   else do continue
+0  MC <- 0
+1  MC <- 1
+2  MC <- 2
+L  if MC == 0 do M0 <- max(M0 - 1, 0)
+   if MC == 1 do M1 <- max(M1 - 1, 0)
+   if MC == 2 do M2 <- max(M2 - 1, 0)
+R  if MC == 0 do M0 <- M0 + 1
+   if MC == 1 do M1 <- M1 + 1
+   if MC == 2 do M2 <- M2 + 1
+A  data[M0] <- data[M1] + data[M2]
+S  data[M0] <- data[M1] - data[M2]
+M  data[M0] <- data[M1] * data[M2]
+C  data[M0] <- data[M1]
+~  data[M0] <- ~data[M1]
+^  data[M0] <- data[M1] ^ data[M2]
+&  data[M0] <- data[M1] & data[M2]
+I  while input_queue.empty()
+     do wait
+   data[M2] <- ord(input_queue.front())
+   input_queue.pop()
+   Only input 1 char.
+O  output_queue.push(chr(data[M2]))
+   Only output 1 char.
+.  exit
+其他字符将会被视作"+"处理
+
+move():
+FX IPx IPy
+U  -1
+D  +1
+L      -1
+R      +1
+
+check():
+在IP运行到code[][]外时，结束程序
+若len(data)<=max(m1,m2,m3)，在data末尾加一项0。
