@@ -10,6 +10,7 @@ def read_code_file(target_file):
 def run_code(code):
     fx2ip = {'U': [-1, 0], 'D': [1, 0], 'L': [0, -1], 'R': [0, 1]}
     ipx = ipy = m0 = m1 = m2 = mc = 0
+    fx = 'U'
     data = []
     while True:
         # check
@@ -20,6 +21,8 @@ def run_code(code):
             data.append(0)
         # set op
         op = code[ipx][ipy]
+        # test output
+        print(f'ipx:{ipx} ipy:{ipy} fx:{fx} op:{op} mc:{mc} m0:{m0}({data[m0]}) m1:{m1}({data[m1]}) m2:{m2}({data[m2]})')
         # do
         if op == '<': fx = 'L'
         elif op == '>': fx = 'R'
@@ -78,7 +81,6 @@ def run_code(code):
             print(chr(data[m2]), end='')
         elif op == '.': break
         else: pass
-        print(ipx,ipy,fx,op) # 测试
         # move
         ipx += fx2ip[fx][0]
         ipy += fx2ip[fx][1]
