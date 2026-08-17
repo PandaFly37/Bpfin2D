@@ -92,5 +92,9 @@ if __name__ == '__main__':
         target_file = sys.argv[1]
     else:
         target_file = 'test_code.txt'
-    code = read_code_file(target_file)
+    try:
+        code = read_code_file(target_file)
+    except FileNotFoundError:
+        print(f"File not found: {target_file}")
+        sys.exit(1)
     run_code(code)
