@@ -1,3 +1,6 @@
+import sys
+
+
 def read_code_file(target_file):
     with open(target_file, 'r', encoding='utf-8') as f:
         text = f.read()
@@ -85,5 +88,9 @@ def run_code(code):
 
 # test
 if __name__ == '__main__':
-    code = read_code_file('test_code.txt')
+    if len(sys.argv) > 1:
+        target_file = sys.argv[1]
+    else:
+        target_file = 'test_code.txt'
+    code = read_code_file(target_file)
     run_code(code)
