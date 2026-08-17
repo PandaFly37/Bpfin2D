@@ -9,20 +9,21 @@ def read_code_file(target_file):
 
 def run_code(code):
     fx2ip = {'U': [-1, 0], 'D': [1, 0], 'L': [0, -1], 'R': [0, 1]}
-    ipx = ipy = m0 = m1 = m2 = mc = 0
+    ipx = ipy = mc = 0
+    m = [0, 0, 0]
     fx = 'U'
     data = []
     while True:
         # check
         if ipx < 0 or ipy < 0 or ipx >= len(code) or ipy >= len(code[0]):
             break
-        m_max = max(m0, m1, m2)
+        m_max = max(m)
         while m_max >= len(data):
             data.append(0)
         # set op
         op = code[ipx][ipy]
         # test output
-        print(f'ipx:{ipx} ipy:{ipy} fx:{fx} op:{op} mc:{mc} m0:{m0}({data[m0]}) m1:{m1}({data[m1]}) m2:{m2}({data[m2]})')
+        print(f'ipx:{ipx} ipy:{ipy} fx:{fx} op:{op} mc:{mc} m0:{m[0]}({data[m[0]]}) m1:{m[1]}({data[m[1]]}) m2:{m[2]}({data[m[2]]})')
         # do
         if op == '<': fx = 'L'
         elif op == '>': fx = 'R'
@@ -47,13 +48,13 @@ def run_code(code):
         elif op == '+':
             pass
         elif op == '/':
-            if data[m1] == data[m2]:
+            if data[m[1]] == data[m[2]]:
                 if fx == 'U': fx = 'R'
                 elif fx == 'D': fx = 'L'
                 elif fx == 'L': fx = 'U'
                 elif fx == 'R': fx = 'D'
         elif op == '\\':
-            if data[m1] == data[m2]:
+            if data[m[1]] == data[m[2]]:
                 if fx == 'U': fx = 'L'
                 elif fx == 'D': fx = 'R'
                 elif fx == 'L': fx = 'D'
@@ -62,23 +63,19 @@ def run_code(code):
         elif op == '1': mc = 1
         elif op == '2': mc = 2
         elif op == 'L':
-            if mc == 0: m0 = max(m0 - 1, 0)
-            elif mc == 1: m1 = max(m1 - 1, 0)
-            elif mc == 2: m2 = max(m2 - 1, 0)
+            m[mc] = max(m[mc] - 1, 0)
         elif op == 'R':
-            if mc == 0: m0 += 1
-            if mc == 1: m1 += 1
-            if mc == 2: m2 += 1
-        elif op == 'A': data[m0] = data[m1] + data[m2]
-        elif op == 'S': data[m0] = data[m1] - data[m2]
-        elif op == 'M': data[m0] = data[m1] * data[m2]
-        elif op == 'C': data[m0] = data[m1]
-        elif op == '~': data[m0] = ~data[m1]
-        elif op == '^': data[m0] = data[m1] ^ data[m2]
-        elif op == '&': data[m0] = data[m1] & data[m2]
+            m[mc] += 1
+        elif op == 'A': data[m[0]] = data[m[1]] + data[m[2]]
+        elif op == 'S': data[m[0]] = data[m[1]] - data[m[2]]
+        elif op == 'M': data[m[0]] = data[m[1]] * data[m[2]]
+        elif op == 'C': data[m[0]] = data[m[1]]
+        elif op == '~': data[m[0]] = ~data[m[1]]
+        elif op == '^': data[m[0]] = data[m[1]] ^ data[m[2]]
+        elif op == '&': data[m[0]] = data[m[1]] & data[m[2]]
         elif op == 'I': pass
         elif op == 'O':
-            print(chr(data[m2]), end='')
+            print(chr(data[m[2]]), end='')
         elif op == '.': break
         else: pass
         # move
