@@ -67,10 +67,8 @@ def run_code(code):
         elif op == '0': mc = 0
         elif op == '1': mc = 1
         elif op == '2': mc = 2
-        elif op == 'L':
-            m[mc] = max(m[mc] - 1, 0)
-        elif op == 'R':
-            m[mc] += 1
+        elif op == 'L': m[mc] = max(m[mc] - 1, 0)
+        elif op == 'R': m[mc] += 1
         elif op == 'A': data[m[0]] = data[m[1]] + data[m[2]]
         elif op == 'S': data[m[0]] = data[m[1]] - data[m[2]]
         elif op == 'M': data[m[0]] = data[m[1]] * data[m[2]]
