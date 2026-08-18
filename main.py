@@ -18,17 +18,25 @@ def run_code(code):
     data = []
     input_queue = []
     input_used = -1
+    step = 1
     while True:
         # check
         if ipx < 0 or ipy < 0 or ipx >= len(code) or ipy >= len(code[0]):
-            break
+            return
         m_max = max(m)
         while m_max >= len(data):
             data.append(0)
+        if step != 1 and (step - 1) % 1000000 == 0:
+            user_res = ''
+            while True:
+                user_res = input(f'已运行{step - 1}步, 是否继续(y/n)? ')
+                if user_res == 'y': break
+                if user_res == 'n': return
+                else: print('请输入y或n')
         # set op
         op = code[ipx][ipy]
         # test output
-        print(f'ipx:{ipx} ipy:{ipy} fx:{fx} op:{op} mc:{mc} m0:{m[0]}({data[m[0]]}) m1:{m[1]}({data[m[1]]}) m2:{m[2]}({data[m[2]]}) i_u:{input_used} i_q:{''.join(input_queue)}')
+        print(f'{step} ipx:{ipx} ipy:{ipy} fx:{fx} op:{op} mc:{mc} m0:{m[0]}({data[m[0]]}) m1:{m[1]}({data[m[1]]}) m2:{m[2]}({data[m[2]]}) i_u:{input_used} i_q:{''.join(input_queue)}')
         # do
         if op == '<': fx = 'L'
         elif op == '>': fx = 'R'
@@ -78,17 +86,17 @@ def run_code(code):
         elif op == '&': data[m[0]] = data[m[1]] & data[m[2]]
         elif op == 'I':
             if len(input_queue) == 0 or len(input_queue) <= input_used + 1:
-                input_queue += list(input('Input: '))
+                input_queue += list(input('输入: '))
             data[m[2]] = ord(input_queue[input_used + 1])
             input_used += 1
         elif op == 'O':
             print(chr(data[m[2]]), end='')
-        elif op == '.': break
+        elif op == '.': return
         else: pass
         # move
         ipx += fx2ip[fx][0]
         ipy += fx2ip[fx][1]
-    return
+        step += 1
 
 # test
 if __name__ == '__main__':
