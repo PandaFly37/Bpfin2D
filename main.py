@@ -10,7 +10,7 @@ def read_code_file(target_file):
     max_len = max(len(row) for row in rows)
     return [row + [' '] * (max_len - len(row)) for row in rows]
 
-def run_code(code):
+def run_code(code, tip_step = 1000000):
     fx2ip = {'U': [-1, 0], 'D': [1, 0], 'L': [0, -1], 'R': [0, 1]}
     ipx = ipy = mc = 0
     m = [0, 0, 0]
@@ -26,7 +26,7 @@ def run_code(code):
         m_max = max(m)
         while m_max >= len(data):
             data.append(0)
-        if step != 1 and (step - 1) % 1000000 == 0:
+        if step != 1 and (step - 1) % tip_step == 0:
             user_res = ''
             while True:
                 user_res = input(f'已运行{step - 1}步, 是否继续(y/n)? ')
@@ -110,4 +110,10 @@ if __name__ == '__main__':
     except FileNotFoundError:
         print(f"File not found: {target_file}")
         sys.exit(1)
-    run_code(code)
+    # --tip-step
+    if '--tip-step' in sys.argv:
+        tip_step = int(sys.argv[sys.argv.index('--tip-step') + 1])
+    else:
+        tip_step = 1000000
+
+    run_code(code, tip_step)
