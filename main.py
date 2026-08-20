@@ -100,8 +100,9 @@ def run_code(code):
 
 # test
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        target_file = sys.argv[1]
+    # --code-file
+    if '--code-file' in sys.argv:
+        target_file = sys.argv[sys.argv.index('--code-file') + 1]
     else:
         target_file = 'test_code.txt'
     try:
